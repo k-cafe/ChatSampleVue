@@ -5,7 +5,9 @@
         <div class="md-title">User</div>
       </md-card-header>
       <md-card-content>
-        
+        <!-- <md-field :class="getValidationClass('id')"> -->
+          <input name="id" v-model="user.id" :disabled="sending">
+        <!-- </md-field> -->
       </md-card-content>
     </md-card>
   </form>
@@ -13,6 +15,7 @@
 
 <script>
   import { validationMixin } from 'vuelidate'
+  import { User } from '../models'
 //   import {
 //     required,
 //     email,
@@ -20,9 +23,17 @@
 //     maxLength
 //   } from 'vuelidate/lib/validators'
 export default {
-    name: 'Top',
-    mixins: [validationMixin],
-  
+  name: 'Top',
+  mixins: [validationMixin],
+  data() {
+    return {
+      user: new User(),
+      sending: false,
+    };
+  },
+  validations: {
+
+  },
 }
 </script>
 
