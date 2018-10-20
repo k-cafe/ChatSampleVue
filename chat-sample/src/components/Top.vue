@@ -16,12 +16,6 @@
 <script>
   import { validationMixin } from 'vuelidate'
   import { User } from '../models'
-//   import {
-//     required,
-//     email,
-//     minLength,
-//     maxLength
-//   } from 'vuelidate/lib/validators'
 export default {
   name: 'Top',
   mixins: [validationMixin],

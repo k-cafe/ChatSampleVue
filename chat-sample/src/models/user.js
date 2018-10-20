@@ -1,11 +1,11 @@
 export class User {
-  static NONE = new User('', '');
+
   constructor(id, name) {
-    this.id =this.getSpaceIfNeeded(id);
-    this.name = this.getSpaceIfNeeded(name);
+    this.id =this.setData(id);
+    this.name = this.setData(name);
   }
 
-  getSpaceIfNeeded(str) {
+  setData(str) {
     return String(str).length > 0 ? str : '';
   }
 }
