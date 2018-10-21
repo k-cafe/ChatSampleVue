@@ -1,0 +1,11 @@
+{
+  "globals": {
+  },
+  "rules": {
+    "no-console": "off",
+    "no-extra-semi": "warn",
+    "no-undef": "warn",
+    "quotes": ["warn", "single"],
+    "space-before-blocks": ["warn", { "functions": "always" }]
+  }
+}

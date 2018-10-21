@@ -14,16 +14,22 @@
 </template>
 
 <script>
-  import { validationMixin } from 'vuelidate'
-  import { User } from '../models'
+import { validationMixin } from 'vuelidate'
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'Top',
   mixins: [validationMixin],
   data() {
     return {
-      user: new User(),
       sending: false,
     };
+  },
+  created() {
+  },
+  computed: {
+    // '...' means sharing 'computed' and 'state'
+    ...mapGetters('user', ['user'])
   },
   validations: {
 
