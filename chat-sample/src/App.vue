@@ -14,10 +14,15 @@
       <md-toolbar class="md-transparent" md-elevation="0">
         <span class="md-title">Menu</span>
       </md-toolbar>
+
       <md-list>
         <md-list-item>
           <md-icon>home</md-icon>
-          <span class="md-list-item-text">Home</span>
+          <span class="md-list-item-text" @click="moveTo('/')">Home</span>
+        </md-list-item>
+        <md-list-item>
+          <md-icon>chat</md-icon>
+          <span class="md-list-item-text" @click="moveTo('/chat')">Chat</span>
         </md-list-item>
       </md-list>
     </md-drawer>
@@ -26,7 +31,10 @@
 </template>
 
 <style>
-
+.md-list-item-text:hover {
+  cursor: pointer;
+  color: #528bf7;
+}
 </style>
 
 <script>
@@ -36,6 +44,11 @@ export default {
     return {
       menuIsVisible: false,
     };
+  },
+  methods: {
+    moveTo(path) {
+      this.$router.push(path);
+    },
   },
 };
 </script>
