@@ -7,11 +7,11 @@
       <md-card class="margin-bottom-5">
           <div class="inline-block width-90 text-field">
             <md-field>
-              <md-textarea placeholder="メッセージを入力してください" md-autogrow></md-textarea>
+              <md-textarea placeholder="メッセージを入力してください" md-autogrow v-model="message"></md-textarea>
             </md-field>
           </div>
           <div class="inline-block width-10 text-align-center">
-            <md-button class="md-icon-button md-primary text-align-center">
+            <md-button class="md-icon-button md-primary text-align-center" @click="sendProcess()">
               <md-icon>send</md-icon>
             </md-button>
           </div>
@@ -19,12 +19,6 @@
     </div>
   </div>
 </template>
-
-<script>
-export default {
-    
-}
-</script>
 
 <style scope>
   #container {
@@ -38,6 +32,8 @@ export default {
     position: fixed;
     bottom: 0;
     width: 100%;
+    padding-left: 5px;
+    padding-right: 5px;
   }
   .margin-bottom-5 {
     margin-bottom: 5px;
@@ -59,3 +55,27 @@ export default {
     text-align: center;
   }
 </style>
+
+<script>
+import { mapGetters, mapActions } from 'vuex';
+import { Comment } from '../models';
+export default {
+  name: 'Chat',
+  data() {
+    return {
+      message: '',
+    };
+  },
+  computed: {
+    ...mapGetters('user', ['user']),
+  },
+  methods: {
+    ...mapActions('comments', ['addComment']),
+    sendProcess() {
+      const comment = new Comment('', this.message, Object.assign({}, this.user));
+      this.addComment(comment);
+      this.message = '';
+    }
+  },
+};
+</script>
