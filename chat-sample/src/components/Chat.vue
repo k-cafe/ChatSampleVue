@@ -11,7 +11,11 @@
             </md-field>
           </div>
           <div class="inline-block width-10 text-align-center">
-            <md-button class="md-icon-button text-align-center" @click="sendProcess()" v-bind:class="[ message.length > 0 ? 'md-primary' : '']">
+            <md-button
+              class="md-icon-button text-align-center"
+              v-bind:class="isAbleToSend ? 'md-primary' : ''"
+              v-bind:disabled="!isAbleToSend"
+              @click="sendProcess()">
               <md-icon>send</md-icon>
             </md-button>
           </div>
@@ -64,6 +68,7 @@ export default {
   data() {
     return {
       message: '',
+      isAbleToSend: false,
     };
   },
   computed: {
@@ -72,11 +77,16 @@ export default {
   methods: {
     ...mapActions('comments', ['addComment']),
     sendProcess() {
-      if (this.message,length === 0) return;
+      if (this.message.length === 0) return;
       const comment = new Comment('', this.message, Object.assign({}, this.user));
       this.addComment(comment);
       this.message = '';
     }
   },
+  watch: {
+    message(newMessage) {
+      this.isAbleToSend = newMessage.length > 0 ? true : false;
+    }
+  }
 };
 </script>
