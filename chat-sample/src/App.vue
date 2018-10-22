@@ -48,6 +48,7 @@ export default {
   methods: {
     moveTo(path) {
       this.$router.push(path);
+      this.menuIsVisible = false;
     },
   },
 };

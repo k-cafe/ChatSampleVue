@@ -11,7 +11,7 @@
             </md-field>
           </div>
           <div class="inline-block width-10 text-align-center">
-            <md-button class="md-icon-button md-primary text-align-center" @click="sendProcess()">
+            <md-button class="md-icon-button text-align-center" @click="sendProcess()" v-bind:class="[ message.length > 0 ? 'md-primary' : '']">
               <md-icon>send</md-icon>
             </md-button>
           </div>
@@ -72,6 +72,7 @@ export default {
   methods: {
     ...mapActions('comments', ['addComment']),
     sendProcess() {
+      if (this.message,length === 0) return;
       const comment = new Comment('', this.message, Object.assign({}, this.user));
       this.addComment(comment);
       this.message = '';
