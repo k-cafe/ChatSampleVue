@@ -1,7 +1,7 @@
 <template>
   <div>
     <div id="container">
-      container
+      <message-list></message-list>
     </div>
     <div id="footer">
       <md-card class="margin-bottom-5">
@@ -63,8 +63,13 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import { Comment } from '../models';
+import MessageList from './MessageList.vue';
+
 export default {
   name: 'Chat',
+  components: {
+    'message-list': MessageList,
+  },
   data() {
     return {
       message: '',

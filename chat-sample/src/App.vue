@@ -35,6 +35,9 @@
   cursor: pointer;
   color: #528bf7;
 }
+body {
+  background-color: #e6edf7;
+}
 </style>
 
 <script>
