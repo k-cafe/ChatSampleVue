@@ -1,38 +1,25 @@
 <template>
   <div class="margin-15px">
     <h1>Message</h1>
-    <chat-message :comment="comment"></chat-message>
+    <div v-if="hasComments">
+      <div v-for="comment in this.comments" :key="comment.id">
+        <chat-message :comment="comment"></chat-message>
+      </div>
+    </div>
   </div>
 </template>
 
 <style scoped>
-  .display-inline-block {
-    display: inline-block;
-  }
   .margin-15px {
     margin-top: 15px;
     margin-bottom: 15px;
     margin-left: 15px;
     margin-right: 15px;
   }
-  .text-center {
-    text-align: center;
-  }
-  .margin-left-20 {
-    margin-left: 20px;
-  }
-  .margin-left-20:before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: -30px;
-    margin-top: -15px;
-    border: 15px solid transparent;
-    border-right: 15px solid white;
-  }
 </style>
 
 <script>
+import { mapGetters } from 'vuex';
 import { Comment, User } from '../models';
 import Message from './Message.vue';
 
@@ -45,6 +32,10 @@ export default {
   },
   components: {
     'chat-message': Message,
+  },
+  computed: {
+    ...mapGetters('comments', ['comments']),
+    hasComments() { return this.comments.length > 0; }
   },
 }
 </script>
