@@ -68,14 +68,6 @@ export default {
         this.$router.push('/chat');
       }
     },
-    isValid(prop) {
-      const field = this.$v.user[prop]
-      if (field) {
-        return {
-          'md-invalid': field.$invalid && field.$dirty
-        }
-      }
-    },
   },
   validations: {
     user: {
