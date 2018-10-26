@@ -84,8 +84,7 @@ export default {
     sendProcess() {
       if (this.message.length === 0) return;
       const comment = new Comment('', this.message, Object.assign({}, this.user));
-      // this.addComment(comment);
-     this.ADD_COMMENT(comment);
+      this.ADD_COMMENT(comment);
       this.message = '';
     }
   },
