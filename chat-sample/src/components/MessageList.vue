@@ -2,7 +2,7 @@
   <div class="margin-15px">
     <h1>Message</h1>
     <div v-if="hasComments">
-      <div v-for="comment in this.comments" :key="comment.id">
+      <div v-for="comment in this.getComments" :key="comment.id">
         <chat-message :comment="comment"></chat-message>
       </div>
     </div>
@@ -19,23 +19,26 @@
 </style>
 
 <script>
-import { mapGetters } from 'vuex';
-import { Comment, User } from '../models';
+import { mapGetters, mapActions } from 'vuex';
 import Message from './Message.vue';
 
 export default {
   name: 'Message',
-  data() {
-    return {
-      comment: new Comment('comment1', 'Start Chat', new User('user01', 'kohei')),
-    };
+  created() {
+    this.$store.dispatch('comments/INIT_COMMENT');
   },
   components: {
     'chat-message': Message,
   },
   computed: {
-    ...mapGetters('comments', ['comments']),
+    ...mapGetters('comments', ['getComments']),
     hasComments() { return this.comments.length > 0; }
+  },
+  actions: {
+    ...mapActions('comments', ['INIT_COMMENT', 'DESTROY_COMMENT']),
+  },
+  destroyed() {
+    this.DESTROY_COMMENT;
   },
 }
 </script>
