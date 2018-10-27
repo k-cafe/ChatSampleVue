@@ -1,10 +1,11 @@
 import db from './database/database';
+import { Comment, User } from '../../models'
 
 const commentsRef = db.collection('comments');
 
 export default {
   namespaced: true,
-  unsubscribe: null,
+  findAll: null,
   state:  {
     data: [],
   },
@@ -38,17 +39,18 @@ export default {
       commit('init', [])
     },
     startListener ({ commit }) {
-      if (this.unsubscribe) {
-        this.unsubscribe()
-        this.unsubscribe = null
+      if (this.findAll) {
+        this.findAll()
+        this.findAll = null
       }
-      this.unsubscribe = commentsRef.onSnapshot(querySnapshot => {
+
+      this.findAll = commentsRef.onSnapshot(querySnapshot => {
         querySnapshot.docChanges().forEach(change => {
-          const payload = {
-            id: change.doc.id,
-            message: change.doc.data().message,
-            user: change.doc.data().user,
-          }
+          const payload = new Comment(
+            change.doc.id,
+            change.doc.data().message,
+            new User(change.doc.data().user.id, change.doc.data().user.name)
+          )
           if (change.type === 'added') { commit('add', payload) }
           else if (change.type === 'modified') { commit('set', payload) } 
           else if (change.type === 'removed') { commit('remove', payload) }
@@ -56,9 +58,9 @@ export default {
       })
     },
     stopListener () {
-      if (this.unsubscribe) {
-        this.unsubscribe()
-        this.unsubscribe = null
+      if (this.findAll) {
+        this.findAll()
+        this.findAll = null
       }
     },
     addComments ({ commit }, payload) {

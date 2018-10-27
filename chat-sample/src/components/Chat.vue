@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div id="container" class="text-align-center">
-      <h1>Message</h1>
+    <div id="container">
+      <h1 class="text-align-center">Message</h1>
       <div id="body">
         <message-list></message-list>
       </div>
