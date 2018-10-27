@@ -1,7 +1,4 @@
-// import * as firebase from 'firebase/app';
-import 'firebase/firestore';
 import db from './database/database';
-// import { Comment } from '../../models';
 
 const commentsRef = db.collection('comments');
 
@@ -22,6 +19,8 @@ export default {
       const index = state.data.findIndex(comment => comment.id === comment.id)
       if (index !== -1) {
         state.data[index] = payload
+        // List内の修正は変更検知してくれないため、新たにインスタンスを作成し、修正
+        state.data = Object.assign([], state.data)
       }
     },
     remove (state, payload) {
@@ -38,32 +37,21 @@ export default {
     clear ({ commit }) {
       commit('init', [])
     },
-    // 1. リスナーの起動
     startListener ({ commit }) {
       if (this.unsubscribe) {
         this.unsubscribe()
         this.unsubscribe = null
       }
-      // 3. Firestoreからデータを検索する
       this.unsubscribe = commentsRef.onSnapshot(querySnapshot => {
-
-        // 6. データが更新されるたびに呼び出される
         querySnapshot.docChanges().forEach(change => {
-
           const payload = {
             id: change.doc.id,
             message: change.doc.data().message,
             user: change.doc.data().user,
           }
-
-          // 4. ミューテーションを通してステートを更新する
-          if (change.type === 'added') {
-            commit('add', payload)
-          } else if (change.type === 'modified') {
-            commit('set', payload)
-          } else if (change.type === 'removed') {
-            commit('remove', payload)
-          }
+          if (change.type === 'added') { commit('add', payload) }
+          else if (change.type === 'modified') { commit('set', payload) } 
+          else if (change.type === 'removed') { commit('remove', payload) }
         })
       })
     },

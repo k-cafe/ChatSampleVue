@@ -1,7 +1,10 @@
 <template>
   <div>
-    <div id="container">
-      <message-list></message-list>
+    <div id="container" class="text-align-center">
+      <h1>Message</h1>
+      <div id="body">
+        <message-list></message-list>
+      </div>
     </div>
     <div id="footer">
       <md-card class="margin-bottom-5">
@@ -30,7 +33,13 @@
     position: relative;
     height: auto !important;
     height: 100%;
-    min-height: 100%;
+    min-height: 50%;
+  }
+  #body {
+      position: relative;
+      overflow: auto;
+      width: 100%;
+      height: 80vh;
   }
   #footer {
     position: fixed;
