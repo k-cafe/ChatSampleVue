@@ -44,12 +44,13 @@ export default {
         this.findAll = null
       }
 
-      this.findAll = commentsRef.onSnapshot(querySnapshot => {
+      this.findAll = commentsRef.orderBy('date', 'asc').onSnapshot(querySnapshot => {
         querySnapshot.docChanges().forEach(change => {
           const payload = new Comment(
             change.doc.id,
             change.doc.data().message,
-            new User(change.doc.data().user.id, change.doc.data().user.name)
+            new User(change.doc.data().user.id, change.doc.data().user.name),
+            change.doc.data().date
           )
           if (change.type === 'added') { commit('add', payload) }
           else if (change.type === 'modified') { commit('set', payload) } 
