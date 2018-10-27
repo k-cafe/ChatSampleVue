@@ -1,6 +1,5 @@
 <template>
   <div class="margin-15px">
-    <h1>Message</h1>
     <div v-if="hasComments">
       <div v-for="comment in data" :key="comment.id">
         <chat-message :comment="comment"></chat-message>
