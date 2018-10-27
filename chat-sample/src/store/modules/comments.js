@@ -1,90 +1,83 @@
-import { firebaseMutations, firebaseAction } from 'vuexfire';
-import firebase from 'firebase/app';
+// import * as firebase from 'firebase/app';
 import 'firebase/firestore';
-import { config } from '../../environment/firebaseConfig';
-import { Comment } from '../../models';
+import db from './database/database';
+// import { Comment } from '../../models';
 
-firebase.initializeApp(config);
-
-const db = firebase.firestore();
-db.settings({ timestampsInSnapshots: true });
 const commentsRef = db.collection('comments');
-
-const INIT_COMMENT = 'INIT_COMMENT';
-const ADD_COMMENT = 'ADD_COMMENT';
-const DESTROY_COMMENT = 'DESTORY_COMMENT';
 
 export default {
   namespaced: true,
   unsubscribe: null,
-  state: {
-    comments: [],
+  state:  {
+    data: [],
   },
   mutations: {
-    ...firebaseMutations,
-    init(state, payload) {
-      state.comments = payload;
+    init (state, payload) {
+      state.data = payload
     },
-    add(state, payload) {
-      state.comments.push(payload);
+    add (state, payload) {
+      state.data.push(payload)
     },
-    set(state, payload) {
-      const index = state.comments.findIndex(comment => comment.id === payload.id);
+    set (state, payload) {
+      const index = state.data.findIndex(comment => comment.id === comment.id)
       if (index !== -1) {
-        state.comments[index] = payload;
+        state.data[index] = payload
       }
     },
-    remove(state, payload) {
-      const index = state.comments.findIndex(comment => comment.id === payload.id);
+    remove (state, payload) {
+      const index = state.data.findIndex(memo => memo.id === payload.id)
       if (index !== -1) {
-        state.comments.splice(index, 1);
+        state.data.splice(index, 1)
       }
     }
+  },
+  getters: {
+    data: (state) => state.data
   },
   actions: {
     clear ({ commit }) {
       commit('init', [])
     },
-    startListener({ commit }) {
+    // 1. リスナーの起動
+    startListener ({ commit }) {
       if (this.unsubscribe) {
-        console.warn('listener is running. ', this.unsubscribe);
-        this.unsubscribe();
+        this.unsubscribe()
         this.unsubscribe = null
       }
-      this.unsubscribe = commentsRef.onSnapshot(snapshot => {
-        snapshot.docChanges.forEach(change => {
-          const payload = new Comment(change.doc.id, change.doc.data().message, change.doc.data().user);
-          if (change.type === 'added') {
-            commit('add', payload);
-          } else if (change.type === 'modified') {
-            commit('set', payload);
-          } else if (change.type === 'removed') {
-            commit('remove', payload);
+      // 3. Firestoreからデータを検索する
+      this.unsubscribe = commentsRef.onSnapshot(querySnapshot => {
+
+        // 6. データが更新されるたびに呼び出される
+        querySnapshot.docChanges().forEach(change => {
+
+          const payload = {
+            id: change.doc.id,
+            message: change.doc.data().message,
+            user: change.doc.data().user,
           }
-        });
-      },
-      (error) => {
-        console.error(error.name);
-      });
+
+          // 4. ミューテーションを通してステートを更新する
+          if (change.type === 'added') {
+            commit('add', payload)
+          } else if (change.type === 'modified') {
+            commit('set', payload)
+          } else if (change.type === 'removed') {
+            commit('remove', payload)
+          }
+        })
+      })
     },
-    stopListener() {
+    stopListener () {
       if (this.unsubscribe) {
-        console.log('listener is stopping. ', this.unsubscribe)
         this.unsubscribe()
         this.unsubscribe = null
       }
     },
-    [INIT_COMMENT]: firebaseAction(({ bindFirebaseRef }) => {
-      bindFirebaseRef('comments', commentsRef, { wait: true });
-    }),
-    [ADD_COMMENT]: firebaseAction((context, comment) => {
-      commentsRef.add(Object.assign({}, comment));
-    }),
-    [DESTROY_COMMENT]: firebaseAction(({ unbindFirebaseRef }) => {
-      unbindFirebaseRef('comments', commentsRef, { wait: true });
-    }),
-  },
-  getters: {
-    comments: state => state.comments,
-  },
+    addComments ({ commit }, payload) {
+      commentsRef.add(Object.assign({}, payload))
+    },
+    deleteComments ({ commit }, payload) {
+      commentsRef.doc(payload.id).delete()
+    }
+  }
 }

@@ -80,11 +80,11 @@ export default {
     ...mapGetters('user', ['user']),
   },
   methods: {
-    ...mapActions('comments', ['ADD_COMMENT']),
+    ...mapActions('comments', ['addComments']),
     sendProcess() {
       if (this.message.length === 0) return;
       const comment = new Comment('', this.message, Object.assign({}, this.user));
-      this.ADD_COMMENT(comment);
+      this.addComments(comment);
       this.message = '';
     }
   },

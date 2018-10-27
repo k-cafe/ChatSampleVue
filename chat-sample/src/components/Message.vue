@@ -69,7 +69,6 @@ export default {
   name: 'Message',
   props: {
     comment: {
-      type: Comment,
       required: true,
     },
   },

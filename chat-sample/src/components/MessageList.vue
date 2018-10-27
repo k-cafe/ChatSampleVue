@@ -1,8 +1,8 @@
 <template>
   <div class="margin-15px">
     <h1>Message</h1>
-    <div v-if="this.comments">
-      <div v-for="comment in this.comments" :key="comment.id">
+    <div v-if="hasComments">
+      <div v-for="comment in data" :key="comment.id">
         <chat-message :comment="comment"></chat-message>
       </div>
     </div>
@@ -27,18 +27,19 @@ export default {
   components: {
     'chat-message': Message,
   },
-  computed: {
-    ...mapGetters('comments', ['comments']),
-    // hasComments() { return this.comments.length > 0; }
+  methods: {
+    ...mapActions('comments', ['clear', 'startListener', 'stopListener']),
   },
-  actions: {
-    ...mapActions('comments', ['clear', 'INIT_COMMENT', 'DESTROY_COMMENT']),
+  computed: {
+    ...mapGetters('comments', ['data']),
+    hasComments() { return this.data.length > 0; }
   },
   created() {
-    this.INIT_COMMENT;
+    this.clear();
+    this.startListener();
   },
   destroyed() {
-    this.DESTROY_COMMENT;
+    this.stopListener();
   },
 }
 </script>
