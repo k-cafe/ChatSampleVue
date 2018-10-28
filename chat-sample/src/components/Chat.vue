@@ -72,7 +72,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import { Comment } from '../models';
-import MessageList from './MessageList.vue';
+import MessageList from '../views//MessageList.vue';
 
 export default {
   name: 'Chat',

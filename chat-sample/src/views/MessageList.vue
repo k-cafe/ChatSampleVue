@@ -27,7 +27,7 @@ export default {
     'chat-message': Message,
   },
   methods: {
-    ...mapActions('comments', ['clear', 'startListener', 'stopListener']),
+    ...mapActions('comments', ['clear', 'subscribe', 'unsubscribe']),
   },
   computed: {
     ...mapGetters('comments', ['data']),
@@ -35,10 +35,10 @@ export default {
   },
   created() {
     this.clear();
-    this.startListener();
+    this.subscribe();
   },
   destroyed() {
-    this.stopListener();
+    this.unsubscribe();
   },
 }
 </script>

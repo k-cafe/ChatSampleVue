@@ -5,7 +5,7 @@ const commentsRef = db.collection('comments');
 
 export default {
   namespaced: true,
-  subscriber: null,
+  findAll: null,
   state:  {
     data: [],
   },
@@ -20,7 +20,7 @@ export default {
       const index = state.data.findIndex(comment => comment.id === comment.id)
       if (index !== -1) {
         state.data[index] = payload
-        // List内の修正は変更検知してくれないため、新たにインスタンスを作成し、修正
+        // List内のオブジェクトの修正は変更検知してくれないため、新たにListのポインタを上書きすることで強制的にVueにデータの反映をさせている
         state.data = Object.assign([], state.data)
       }
     },
@@ -38,13 +38,13 @@ export default {
     clear ({ commit }) {
       commit('init', [])
     },
-    startListener ({ commit }) {
-      if (this.subscriber) {
-        this.subscriber()
-        this.subscriber = null
+    subscribe ({ commit }) {
+      if (this.findAll) {
+        this.findAll()
+        this.findAll = null
       }
 
-      this.subscriber = commentsRef.orderBy('date', 'asc').onSnapshot(querySnapshot => {
+      this.findAll = commentsRef.orderBy('date', 'asc').onSnapshot(querySnapshot => {
         querySnapshot.docChanges().forEach(change => {
           const payload = new Comment(
             change.doc.id,
@@ -58,10 +58,10 @@ export default {
         })
       })
     },
-    stopListener () {
-      if (this.subscriber) {
-        this.subscriber()
-        this.subscriber = null
+    unsubscribe () {
+      if (this.findAll) {
+        this.findAll()
+        this.findAll = null
       }
     },
     addComments ({ commit }, payload) {

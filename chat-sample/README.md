@@ -1,5 +1,17 @@
 # chat-sample
 
+## about directory structure   
+```
+- src
+    - assets
+    - components  <- routerファイルに書かれているmain vue
+    - environment
+    - models
+    - router
+    - store
+    - views <- routerに書かれておらず、vueファイル内で呼ばれるvueファイル
+```
+
 ## Project setup
 ```
 npm install
