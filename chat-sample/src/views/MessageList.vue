@@ -1,7 +1,7 @@
 <template>
   <div class="margin-15px">
     <div v-if="hasComments">
-      <div v-for="comment in data" :key="comment.id">
+      <div v-for="comment in comments" :key="comment.id">
         <chat-message :comment="comment"></chat-message>
       </div>
     </div>
@@ -27,14 +27,14 @@ export default {
     'chat-message': Message,
   },
   methods: {
-    ...mapActions('comments', ['clear', 'subscribe', 'unsubscribe']),
+    ...mapActions('comments', ['initialized', 'subscribe', 'unsubscribe']),
   },
   computed: {
-    ...mapGetters('comments', ['data']),
-    hasComments() { return this.data.length > 0; }
+    ...mapGetters('comments', ['comments']),
+    hasComments() { return this.comments.length > 0; }
   },
   created() {
-    this.clear();
+    this.initialized();
     this.subscribe();
   },
   destroyed() {
