@@ -5,7 +5,7 @@ const commentsRef = db.collection('comments');
 
 export default {
   namespaced: true,
-  findAll: null,
+  subscriber: null,
   state:  {
     data: [],
   },
@@ -39,12 +39,12 @@ export default {
       commit('init', [])
     },
     startListener ({ commit }) {
-      if (this.findAll) {
-        this.findAll()
-        this.findAll = null
+      if (this.subscriber) {
+        this.subscriber()
+        this.subscriber = null
       }
 
-      this.findAll = commentsRef.orderBy('date', 'asc').onSnapshot(querySnapshot => {
+      this.subscriber = commentsRef.orderBy('date', 'asc').onSnapshot(querySnapshot => {
         querySnapshot.docChanges().forEach(change => {
           const payload = new Comment(
             change.doc.id,
@@ -59,9 +59,9 @@ export default {
       })
     },
     stopListener () {
-      if (this.findAll) {
-        this.findAll()
-        this.findAll = null
+      if (this.subscriber) {
+        this.subscriber()
+        this.subscriber = null
       }
     },
     addComments ({ commit }, payload) {
