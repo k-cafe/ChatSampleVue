@@ -1,7 +1,4 @@
-import db from './database/database';
-import { Comment, User } from '../../models'
-
-const commentsRef = db.collection('comments');
+import { getAll, add, remove } from '../../repositories/comment-repository'
 
 export default {
   namespaced: true,
@@ -44,19 +41,11 @@ export default {
         this.findAll = null
       }
 
-      this.findAll = commentsRef.orderBy('date', 'asc').onSnapshot(querySnapshot => {
-        querySnapshot.docChanges().forEach(change => {
-          const payload = new Comment(
-            change.doc.id,
-            change.doc.data().message,
-            new User(change.doc.data().user.id, change.doc.data().user.name),
-            change.doc.data().date
-          )
-          if (change.type === 'added') { commit('add', payload) }
-          else if (change.type === 'modified') { commit('set', payload) } 
-          else if (change.type === 'removed') { commit('remove', payload) }
-        })
-      })
+      this.findAll = getAll((type, payload) => {
+        if (type === 'added') { commit('add', payload) }
+        else if (type === 'modified') { commit('set', payload) }
+        else if (type === 'removed') { commit('remove', payload) }
+      });
     },
     unsubscribe () {
       if (this.findAll) {
@@ -65,10 +54,10 @@ export default {
       }
     },
     addComments ({ commit }, payload) {
-      commentsRef.add(Object.assign({}, payload))
+      add(payload)
     },
     deleteComments ({ commit }, payload) {
-      commentsRef.doc(payload.id).delete()
-    }
+      remove(payload)
+    },
   }
 }
