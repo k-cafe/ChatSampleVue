@@ -1,5 +1,12 @@
 # chat-sample
 
+## importance   
+```
+If u use this, do follow things.
+- Add directory and js file: environment, environment/firebaseConfig.js
+- add firebase
+```
+
 ## about directory structure   
 ```
 - src

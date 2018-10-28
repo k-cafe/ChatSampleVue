@@ -7,35 +7,35 @@ export default {
     data: [],
   },
   mutations: {
-    init (state, payload) {
-      state.data = payload
+    init (state, comment) {
+      state.data = comment
     },
-    add (state, payload) {
-      state.data.push(payload)
+    add (state, comment) {
+      state.data.push(comment)
     },
-    set (state, payload) {
+    set (state, comment) {
       const index = state.data.findIndex(comment => comment.id === comment.id)
       if (index !== -1) {
-        state.data[index] = payload
+        state.data[index] = comment
         // List内のオブジェクトの修正は変更検知してくれないため、新たにListのポインタを上書きすることで強制的にVueにデータの反映をさせている
         state.data = Object.assign([], state.data)
       }
     },
-    remove (state, payload) {
-      const index = state.data.findIndex(memo => memo.id === payload.id)
+    remove (state, comment) {
+      const index = state.data.findIndex(target => target.id === comment.id)
       if (index !== -1) {
         state.data.splice(index, 1)
       }
     }
   },
   getters: {
-    data: (state) => state.data
+    comments: (state) => state.data
   },
   actions: {
-    clear ({ commit }) {
+    initialized({ commit }) {
       commit('init', [])
     },
-    subscribe ({ commit }) {
+    subscribe({ commit }) {
       // getAll()を呼び出すことでfirebaseから取得したデータを一度解放する。getAll()をずっと続けているとメモリリークに繋がるので注意
       if (this.findAll) {
         this.findAll()
@@ -43,24 +43,24 @@ export default {
       }
 
       // callback function
-      this.findAll = getAll((type, payload) => {
-        if (type === 'added') { commit('add', payload) }
-        else if (type === 'modified') { commit('set', payload) }
-        else if (type === 'removed') { commit('remove', payload) }
+      this.findAll = getAll((type, comment) => {
+        if (type === 'added') { commit('add', comment) }
+        else if (type === 'modified') { commit('set', comment) }
+        else if (type === 'removed') { commit('remove', comment) }
       });
     },
-    unsubscribe () {
-      // getAll()を呼び出すことでfirebaseから取得したデータを一度解放する。getAll()をずっと続けているとメモリリークに繋がるので注意
+    unsubscribe() {
+      // 同上
       if (this.findAll) {
         this.findAll()
         this.findAll = null
       }
     },
-    addComments ({ commit }, payload) {
-      add(payload)
+    addComments({ commit }, comment) {
+      add(comment)
     },
-    deleteComments ({ commit }, payload) {
-      remove(payload)
+    deleteComments({ commit }, comment) {
+      remove(comment)
     },
   }
 }
