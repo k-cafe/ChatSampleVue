@@ -36,11 +36,13 @@ export default {
       commit('init', [])
     },
     subscribe ({ commit }) {
+      // getAll()を呼び出すことでfirebaseから取得したデータを一度解放する。getAll()をずっと続けているとメモリリークに繋がるので注意
       if (this.findAll) {
         this.findAll()
         this.findAll = null
       }
 
+      // callback function
       this.findAll = getAll((type, payload) => {
         if (type === 'added') { commit('add', payload) }
         else if (type === 'modified') { commit('set', payload) }
@@ -48,6 +50,7 @@ export default {
       });
     },
     unsubscribe () {
+      // getAll()を呼び出すことでfirebaseから取得したデータを一度解放する。getAll()をずっと続けているとメモリリークに繋がるので注意
       if (this.findAll) {
         this.findAll()
         this.findAll = null

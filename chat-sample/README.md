@@ -6,6 +6,7 @@
     - assets
     - components  <- routerファイルに書かれているmain vue
     - environment
+    - repositories
     - models
     - router
     - store
