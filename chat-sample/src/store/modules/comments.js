@@ -1,8 +1,9 @@
-import { getAll, add, remove } from '../../repositories/comment-repository'
+import { CommentRepository } from '../../repositories/comment-repository'
 
 export default {
   namespaced: true,
   findAll: null,
+  commentRepository: null,
   state:  {
     data: [],
   },
@@ -36,14 +37,18 @@ export default {
       commit('init', [])
     },
     subscribe({ commit }) {
-      // getAll()を呼び出すことでfirebaseから取得したデータを一度解放する。getAll()をずっと続けているとメモリリークに繋がるので注意
+      // getAll()を呼び出すことでfirebaseから取得したデータを一度解放する。
+      // 解放しなかった場合、次にこれを呼ぶと２重で同じデータが取得されてしまう
+      // また、メモリリークの可能性が増えるので削除をする
       if (this.findAll) {
         this.findAll()
         this.findAll = null
       }
 
+      this.commentRepository =  new CommentRepository();
+
       // callback function
-      this.findAll = getAll((type, comment) => {
+      this.findAll = this.commentRepository.findAll((type, comment) => {
         if (type === 'added') { commit('add', comment) }
         else if (type === 'modified') { commit('set', comment) }
         else if (type === 'removed') { commit('remove', comment) }
@@ -57,10 +62,10 @@ export default {
       }
     },
     addComments({ commit }, comment) {
-      add(comment)
+      this.commentRepository.add(comment)
     },
     deleteComments({ commit }, comment) {
-      remove(comment)
+      this.commentRepository.remove(comment)
     },
   }
 }
