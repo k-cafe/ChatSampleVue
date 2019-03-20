@@ -9,13 +9,13 @@
         <md-card-content>
           <md-field>
             <label>Your Id</label>
-            <md-input name="id" v-model="user.id" :disabled="sending"></md-input>
-            <span class="error" v-show="!$v.user.id.required">Invalid Id</span>
+            <md-input name="id" v-model="signUpUser.id" :disabled="sending"></md-input>
+            <span class="error" v-show="!$v.signUpUser.id.required">Invalid Id</span>
           </md-field>
           <md-field>
             <label>Your Name</label>
-            <md-input name="name" v-model="user.name" :disabled="sending"></md-input>
-            <span class="error" v-show="!$v.user.name.required">Invalid Name</span>
+            <md-input name="name" v-model="signUpUser.name" :disabled="sending"></md-input>
+            <span class="error" v-show="!$v.signUpUser.name.required">Invalid Name</span>
           </md-field>
         </md-card-content>
 
@@ -47,7 +47,7 @@
 
 <script>
 import { validationMixin } from 'vuelidate'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { required, minLength } from 'vuelidate/lib/validators'
 
 export default {
@@ -59,18 +59,23 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('user', ['user'])
+    ...mapGetters('user', ['user']),
+    signUpUser() {
+      return Object.assign({}, this.user)
+    }
   },
   methods: {
+    ...mapActions('user', ['register']),
     submit() {
       if (!this.$v.$invalid) {
         this.sending = true;
+        this.register(this.signUpUser);
         this.$router.push('/chat');
       }
     },
   },
   validations: {
-    user: {
+    signUpUser: {
       id: {
         required,
         minLength: minLength(3),

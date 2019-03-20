@@ -18,7 +18,7 @@
     "vuexfire": "^3.0.0-alpha.5"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.0.5",
+    "@vue/cli-plugin-babel": "^3.5.1",
     "@vue/cli-plugin-eslint": "^3.0.5",
     "@vue/cli-service": "^3.0.5",
     "vue-template-compiler": "^2.5.17"
