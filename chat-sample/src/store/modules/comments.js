@@ -1,4 +1,5 @@
-import { CommentRepository } from '../../repositories/comment-repository'
+import { CommentRepository } from '../../repositories/comment-repository';
+import types from './mutation-types/comment';
 
 export default {
   namespaced: true,
@@ -8,13 +9,13 @@ export default {
     data: [],
   },
   mutations: {
-    init (state, comment) {
+    [types.INIT] (state, comment) {
       state.data = comment
     },
-    add (state, comment) {
+    [types.ADD] (state, comment) {
       state.data.push(comment)
     },
-    set (state, comment) {
+    [types.UPDATE] (state, comment) {
       const index = state.data.findIndex(comment => comment.id === comment.id)
       if (index !== -1) {
         state.data[index] = comment
@@ -22,7 +23,7 @@ export default {
         state.data = Object.assign([], state.data)
       }
     },
-    remove (state, comment) {
+    [types.DELETE] (state, comment) {
       const index = state.data.findIndex(target => target.id === comment.id)
       if (index !== -1) {
         state.data.splice(index, 1)
@@ -34,7 +35,7 @@ export default {
   },
   actions: {
     initialized({ commit }) {
-      commit('init', [])
+      commit(types.INIT, [])
     },
     subscribe({ commit }) {
       // getAll()を呼び出すことでfirebaseから取得したデータを一度解放する。
@@ -49,9 +50,9 @@ export default {
 
       // callback function
       this.findAll = this.commentRepository.findAll((type, comment) => {
-        if (type === 'added') { commit('add', comment) }
-        else if (type === 'modified') { commit('set', comment) }
-        else if (type === 'removed') { commit('remove', comment) }
+        if (type === 'added') { commit(types.ADD, comment) }
+        else if (type === 'modified') { commit(types.UPDATE, comment) }
+        else if (type === 'removed') { commit(types.DELETE, comment) }
       });
     },
     unsubscribe() {

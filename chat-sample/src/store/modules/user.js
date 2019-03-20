@@ -1,4 +1,5 @@
 import { User } from '../../models';
+import types from './mutation-types/user';
 
 export default {
   namespaced: true,
@@ -9,8 +10,13 @@ export default {
     user: (state) => state.user,
   },
   mutations: {
-    register (state, user) {
+    [types.ADD] (state, user) {
       state.user = user;
     },
   },
+  actions: {
+    register ({ commit }, user) {
+      commit(types.ADD, user);
+    }
+  }
 };
