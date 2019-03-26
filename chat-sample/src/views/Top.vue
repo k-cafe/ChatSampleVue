@@ -4,11 +4,11 @@
       <md-card>
         <md-progress-bar md-mode="indeterminate" v-show="sending" />
         <md-card-header>
-          <div class="md-title">Your Data is ...</div>
+          <div class="md-title">Sign In</div>
         </md-card-header>
         <md-card-content>
           <md-field>
-            <label>Your Id</label>
+            <label>Your Email</label>
             <md-input name="id" v-model="signUpUser.id" :disabled="sending"></md-input>
             <span class="error" v-show="!$v.signUpUser.id.required">Invalid Id</span>
           </md-field>

@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
-import Top from '../components/Top.vue';
-import Chat from '../components/Chat.vue';
+import Top from '@/views/Top.vue';
+import Chat from '@/views/Chat.vue';
 
 Vue.use(VueRouter);
 
