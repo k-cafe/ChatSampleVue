@@ -1,11 +1,7 @@
 export class User {
-
-  constructor(id, name) {
-    this.id =this.setData(id);
-    this.name = this.setData(name);
-  }
-
-  setData(str) {
-    return String(str).length > 0 ? str : '';
+  constructor(uid, displayName, email) {
+    this.uid = uid;
+    this.displayName = displayName;
+    this.email = email;
   }
 }

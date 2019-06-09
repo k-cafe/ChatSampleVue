@@ -1,3 +1,4 @@
 const ADD = 'add';
+const INITIALIZED = 'initialized';
 
-export default { ADD };
+export default { ADD, INITIALIZED };
