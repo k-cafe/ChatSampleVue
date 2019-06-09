@@ -1,4 +1,4 @@
-import db from './database';
+import { db } from './database';
 import { Comment, User } from '../models'
 
 export class CommentRepository {
@@ -12,7 +12,7 @@ export class CommentRepository {
         const comment = new Comment(
           change.doc.id,
           change.doc.data().message,
-          new User(change.doc.data().user.id, change.doc.data().user.name),
+          new User(change.doc.data().user.uid, change.doc.data().user.displayName, change.doc.data().user.email),
           change.doc.data().date
         );
         crudFunction(change.type, comment);
@@ -21,10 +21,10 @@ export class CommentRepository {
   }
 
   add(comment) {
-    this.commentsRef.add(Object.assign({}, comment));
+    this.commentsRef.add({...comment});
   }
 
   remove(comment) {
-    this.commentsRef.doc(comment.id).delete()
+    this.commentsRef.doc(comment.id).delete();
   }
 }

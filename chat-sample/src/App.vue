@@ -8,6 +8,11 @@
           </md-button>
           <h3 class="md-title">Chat Sample</h3>
         </div>
+        <div class="md-toolbar-section-end">
+          <md-button class="md-icon-button" @click="signOut">
+            <md-icon>exit_to_app</md-icon>
+          </md-button>
+        </div>
       </div>
     </md-toolbar>
     <md-drawer :md-active.sync="menuIsVisible">
@@ -16,10 +21,10 @@
       </md-toolbar>
 
       <md-list>
-        <md-list-item>
+        <!-- <md-list-item>
           <md-icon>home</md-icon>
           <span class="md-list-item-text" @click="moveTo('/')">Home</span>
-        </md-list-item>
+        </md-list-item> -->
         <md-list-item>
           <md-icon>chat</md-icon>
           <span class="md-list-item-text" @click="moveTo('/chat')">Chat</span>
@@ -41,6 +46,7 @@ body {
 </style>
 
 <script>
+import { mapActions } from 'vuex';
 export default {
   name: 'app',
   data() {
@@ -49,6 +55,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions('user', ['signOut']),
     moveTo(path) {
       this.$router.push(path);
       this.menuIsVisible = false;

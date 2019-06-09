@@ -72,7 +72,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import { Comment } from '../models';
-import MessageList from '../views//MessageList.vue';
+import MessageList from '@/components/MessageList.vue';
 
 export default {
   name: 'Chat',
@@ -92,7 +92,7 @@ export default {
     ...mapActions('comments', ['addComments']),
     sendProcess() {
       if (this.message.length === 0) return;
-      const comment = new Comment('', this.message, Object.assign({}, this.user));
+      const comment = new Comment('', this.message, Object.assign({}, this.user), new Date());
       this.addComments(comment);
       this.message = '';
     }

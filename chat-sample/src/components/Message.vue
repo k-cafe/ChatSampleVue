@@ -76,10 +76,10 @@ export default {
   computed: {
       ...mapGetters('user', ['user']),
       isYourComment() {
-        return this.comment.user.id === this.user.id;
+        return typeof this.user !== 'undefined' && this.user.uid !== 'undefined' && this.comment.user.uid === this.user.uid;
       },
       initial() {
-        return this.comment.user.name.substring(0, 1);
+        return this.comment.user.email.substring(0, 1);
       },
   },
 }
